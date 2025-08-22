@@ -10,7 +10,8 @@ import { setCurrentUser,
     setIsSignupMode,
     validateEmail,
     validatePhone,
-    isEmailOrPhone
+    isEmailOrPhone,
+    showLogin
 
 } from "./script.js";
 console.log(API_URL);
@@ -92,6 +93,8 @@ export function startFaceRecognition() {
         'Verifying identity...',
         'Authentication successful!'
     ];
+    // show login form
+    document.getElementById('showLogin').addEventListener('click', () => showLogin());
 
     const interval = setInterval(() => {
         if (step < steps.length) {

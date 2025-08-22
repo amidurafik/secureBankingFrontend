@@ -91,7 +91,7 @@ export function closeModal() {
 }
 
 // Form switching functions
-function showLogin() {
+export function showLogin() {
     document.getElementById('loginForm').classList.remove('hidden');
     document.getElementById('signupForm').classList.add('hidden');
     document.getElementById('faceRecognition').classList.add('hidden');
