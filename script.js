@@ -39,7 +39,7 @@ async function getUserAccount() {
     const token = localStorage.getItem("token");
     try{
         if (!token) return null;
-       const res = 'http://localhost:3000/api/accounts/getaccount';
+       const res = `${import.meta.env.VITE_API_URL}/api/accounts/getaccount`;
        const response = await fetch(res, {
            headers: { Authorization: `Bearer ${token}` }
        });
@@ -62,7 +62,7 @@ export async function getCurrentUser() {
     if (!token) return null;
 
     try {
-        const response = await fetch("http://localhost:3000/api/users/me", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/me`, {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -429,7 +429,7 @@ export async function loadAccounts() {
 
     try {
         showLoading();
-        const response = await fetch("http://localhost:3000/api/accounts", {
+        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`
