@@ -1,17 +1,18 @@
-import { setCurrentUser, 
-    getCurrentUser, 
-    showLoading, 
-    showFaceRecognition, 
-    hideLoading, 
-    showAlert, 
+import {
+    setCurrentUser,
+    getCurrentUser,
+    showLoading,
+    showFaceRecognition,
+    hideLoading,
+    showAlert,
     closeModal,
-    loadAccounts, 
+    loadAccounts,
     showBankingInterface,
     setIsSignupMode,
     validateEmail,
     validatePhone,
     isEmailOrPhone,
-    showLogin
+
 
 } from "./script.js";
 console.log(API_URL);
@@ -94,6 +95,12 @@ export function startFaceRecognition() {
         'Authentication successful!'
     ];
     // show login form
+    // Form switching functions
+     function showLogin() {
+        document.getElementById('loginForm').classList.remove('hidden');
+        document.getElementById('signupForm').classList.add('hidden');
+        document.getElementById('faceRecognition').classList.add('hidden');
+    }
     document.getElementById('showLogin').addEventListener('click', () => showLogin());
 
     const interval = setInterval(() => {
@@ -104,7 +111,7 @@ export function startFaceRecognition() {
             clearInterval(interval);
             setTimeout(() => {
                 location.href = "markups/SecureBanking.html";
-              
+
             }, 1000);
         }
     }, 1500);
@@ -116,7 +123,7 @@ function showSignup() {
     document.getElementById('faceRecognition').classList.add('hidden');
     setIsSignupMode(true)
 }
-document.getElementById('signUpbtn').addEventListener('click',()=> showSignup())
+document.getElementById('signUpbtn').addEventListener('click', () => showSignup())
 document.addEventListener("DOMContentLoaded", () => {
     const signupForm = document.getElementById("signupFormSubmit");
 
@@ -195,7 +202,7 @@ document.addEventListener("DOMContentLoaded", () => {
                 phone: data.user.phone,
             });
 
-            console.log("Current user set:",getCurrentUser());
+            console.log("Current user set:", getCurrentUser());
 
             // ✅ Now call face recognition
             showFaceRecognition(true);
@@ -208,7 +215,7 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 });
 
-document.getElementById('closeModal').addEventListener('click',()=> closeModal() );
+document.getElementById('closeModal').addEventListener('click', () => closeModal());
 
 // Start face recognition scan
 async function startFaceScan() {
@@ -217,10 +224,10 @@ async function startFaceScan() {
 
     try {
         scanningText.innerText = "Requesting camera access...";
-        
+
         // Request access to webcam
         const stream = await navigator.mediaDevices.getUserMedia({ video: true });
-        
+
         // Show video feed
         videoElement.srcObject = stream;
         scanningText.innerText = "Scanning... Please keep your face centered.";
@@ -229,7 +236,7 @@ async function startFaceScan() {
         setTimeout(() => {
             scanningText.innerText = "Face captured successfully!";
             stopFaceScan(stream);
-              location.href = "markups/SecureBanking.html";
+            location.href = "markups/SecureBanking.html";
         }, 5000); // 5-second fake scan
     } catch (err) {
         console.error("Camera error:", err);
