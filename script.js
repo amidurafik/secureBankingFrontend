@@ -12,6 +12,7 @@
 
 // Dark mode detection
 
+
 if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
     document.documentElement.classList.add('dark');
 }
@@ -39,7 +40,7 @@ async function getUserAccount() {
     const token = localStorage.getItem("token");
     try{
         if (!token) return null;
-       const res = `${import.meta.env.VITE_API_URL}/api/accounts/getaccount`;
+       const res = `${API_URL}/api/accounts/getaccount`;
        const response = await fetch(res, {
            headers: { Authorization: `Bearer ${token}` }
        });
@@ -62,7 +63,7 @@ export async function getCurrentUser() {
     if (!token) return null;
 
     try {
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/users/me`, {
+        const response = await fetch(`${API_URL}/api/users/me`, {
             headers: { Authorization: `Bearer ${token}` }
         });
 
@@ -429,7 +430,7 @@ export async function loadAccounts() {
 
     try {
         showLoading();
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/accounts`, {
+        const response = await fetch(`${API_URL}/api/accounts`, {
             method: "GET",
             headers: {
                 "Authorization": `Bearer ${token}`

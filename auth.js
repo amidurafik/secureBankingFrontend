@@ -13,6 +13,7 @@ import { setCurrentUser,
     isEmailOrPhone
 
 } from "./script.js";
+console.log(API_URL);
 document.getElementById("loginFormSubmit").addEventListener("submit", async (e) => {
     e.preventDefault();
 
@@ -26,7 +27,7 @@ document.getElementById("loginFormSubmit").addEventListener("submit", async (e) 
 
     try {
         showLoading();
-        const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/login`, {
+        const response = await fetch(`${API_URL}/api/auth/login`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ emailOrPhone, password })
@@ -159,7 +160,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         try {
             showLoading();
-            const response = await fetch(`${import.meta.env.VITE_API_URL}/api/auth/register`, {
+            const response = await fetch(`${API_URL}/auth/register`, {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
                 body: JSON.stringify({
