@@ -1,0 +1,564 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Transfer Money</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49C7'
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        .fade-in {
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(10px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .slide-in {
+            animation: slideIn 0.4s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateX(100%);
+            }
+
+            to {
+                transform: translateX(0);
+            }
+        }
+
+        .pulse-ring {
+            animation: pulse-ring 1.5s ease-out infinite;
+        }
+        .header{
+            display: flex;
+            align-items: first baseline;
+            justify-content: space-evenly;
+        }
+        svg{
+            width: 40px;
+            color: white;
+            
+        }
+        .back-svg{
+            width: 50px;
+            height: 50px;
+            background:#000;
+            border-radius: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            cursor: pointer;
+        }
+        @keyframes pulse-ring {
+            0% {
+                transform: scale(0.8);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(1.4);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
+      <div class="back-svg">
+        <svg viewBox="0 0 512 512" xmlns="http://www.w3.org/2000/svg" fill="#ffffff"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"><title>ionicons-v5-a</title><polyline points="328 112 184 256 328 400" style="fill:none;stroke:#ffffff;stroke-linecap:round;stroke-linejoin:round;stroke-width:48px"></polyline></g></svg>
+      </div>  
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Header -->
+        <div class="header">
+          
+            <div class="text-center mb-8 fade-in">
+                <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4"></path>
+                    </svg>
+                </div>
+                <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Transfer Money</h1>
+                <p class="text-gray-600 dark:text-gray-400">Send money quickly and securely</p>
+            </div>
+
+        </div>
+
+
+        <!-- Balance Card -->
+        <div class="bg-gradient-to-r from-primary to-primary-dark rounded-xl p-6 mb-6 text-white fade-in">
+            <div class="flex justify-between items-center">
+                <div>
+                    <p class="text-white/80 text-sm">Available Balance</p>
+                    <p class="text-2xl font-bold">$12,486.50</p>
+                </div>
+                <div class="text-right">
+                    <p class="text-white/80 text-sm">Checking Account</p>
+                    <p class="text-white/90">****-001</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Transfer Form -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6 fade-in">
+            <form id="transferForm" class="space-y-6">
+                <!-- Transfer Type -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                        Transfer To
+                    </label>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-3">
+                        <label
+                            class="flex flex-col items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <input type="radio" name="transferType" value="internal" class="sr-only">
+                            <div
+                                class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mb-2">
+                                <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                                    viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900 dark:text-white">Bank Account</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">Local banks</span>
+                        </label>
+                        <label
+                            class="flex flex-col items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <input type="radio" name="transferType" value="mobile-money" class="sr-only">
+                            <div
+                                class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mb-2">
+                                <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M12 18h.01M8 21h8a2 2 0 002-2V5a2 2 0 00-2-2H8a2 2 0 00-2 2v14a2 2 0 002 2z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900 dark:text-white">Mobile Money</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">MTN, Vodafone</span>
+                        </label>
+                        <label
+                            class="flex flex-col items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <input type="radio" name="transferType" value="international" class="sr-only">
+                            <div
+                                class="w-12 h-12 bg-purple-100 dark:bg-purple-900 rounded-full flex items-center justify-center mb-2">
+                                <svg class="w-6 h-6 text-purple-600 dark:text-purple-400" fill="none"
+                                    stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                        d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z">
+                                    </path>
+                                </svg>
+                            </div>
+                            <span class="text-sm font-medium text-gray-900 dark:text-white">International</span>
+                            <span class="text-xs text-gray-500 dark:text-gray-400">Worldwide</span>
+                        </label>
+                    </div>
+                    <div id="transferTypeError" class="text-red-500 text-sm mt-1 hidden">Please select a transfer type
+                    </div>
+                </div>
+
+                <!-- Recipient Details for Bank Account -->
+                <div id="bankAccountSection" class="hidden">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="recipientBank"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Recipient Bank
+                            </label>
+                            <select id="recipientBank"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="">Select bank</option>
+                                <option value="gcb">GCB Bank</option>
+                                <option value="ecobank">Ecobank Ghana</option>
+                                <option value="stanbic">Stanbic Bank Ghana</option>
+                                <option value="cal">CAL Bank</option>
+                                <option value="uba">UBA Ghana</option>
+                                <option value="fidelity">Fidelity Bank Ghana</option>
+                                <option value="absa">Absa Bank Ghana</option>
+                                <option value="zenith">Zenith Bank Ghana</option>
+                                <option value="access">Access Bank Ghana</option>
+                                <option value="adb">ADB Bank</option>
+                            </select>
+                            <div id="recipientBankError" class="text-red-500 text-sm mt-1 hidden">Please select
+                                recipient's bank</div>
+                        </div>
+                        <div>
+                            <label for="recipientAccountNumber"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Account Number
+                            </label>
+                            <input type="text" id="recipientAccountNumber"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                placeholder="1234567890">
+                            <div id="recipientAccountNumberError" class="text-red-500 text-sm mt-1 hidden">Please enter
+                                a valid account number</div>
+                        </div>
+                        <div>
+                            <label for="recipientName"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Recipient Name
+                            </label>
+                            <input type="text" id="recipientName"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                placeholder="John Doe">
+                            <div id="recipientNameError" class="text-red-500 text-sm mt-1 hidden">Please enter
+                                recipient's name</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipient Details for Mobile Money -->
+                <div id="mobileMoneySection" class="hidden">
+                    <div class="space-y-4">
+                        <div>
+                            <label for="mobileNetwork"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Mobile Network
+                            </label>
+                            <select id="mobileNetwork"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="">Select network</option>
+                                <option value="mtn">MTN Ghana</option>
+                                <option value="vodafone">Vodafone Ghana</option>
+                                <option value="airteltigo">AirtelTigo</option>
+                            </select>
+                            <div id="mobileNetworkError" class="text-red-500 text-sm mt-1 hidden">Please select mobile
+                                network</div>
+                        </div>
+                        <div>
+                            <label for="mobileNumber"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Mobile Number
+                            </label>
+                            <div class="relative">
+                                <span
+                                    class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">+233</span>
+                                <input type="tel" id="mobileNumber"
+                                    class="w-full pl-16 pr-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                    placeholder="244567890" maxlength="9">
+                            </div>
+                            <div id="mobileNumberError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid
+                                mobile number</div>
+                        </div>
+                        <div>
+                            <label for="mobileRecipientName"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Recipient Name
+                            </label>
+                            <input type="text" id="mobileRecipientName"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                placeholder="John Doe">
+                            <div id="mobileRecipientNameError" class="text-red-500 text-sm mt-1 hidden">Please enter
+                                recipient's name</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recipient Details for International -->
+                <div id="internationalSection" class="hidden">
+                    <div class="space-y-4">
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <div>
+                                <label for="recipientCountry"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Country
+                                </label>
+                                <select id="recipientCountry"
+                                    class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    <option value="">Select country</option>
+                                    <option value="US">United States</option>
+                                    <option value="UK">United Kingdom</option>
+                                    <option value="CA">Canada</option>
+                                    <option value="DE">Germany</option>
+                                    <option value="FR">France</option>
+                                    <option value="AU">Australia</option>
+                                    <option value="NG">Nigeria</option>
+                                    <option value="KE">Kenya</option>
+                                    <option value="ZA">South Africa</option>
+                                </select>
+                                <div id="recipientCountryError" class="text-red-500 text-sm mt-1 hidden">Please select
+                                    country</div>
+                            </div>
+                            <div>
+                                <label for="currency"
+                                    class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Currency
+                                </label>
+                                <select id="currency"
+                                    class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                    <option value="">Select currency</option>
+                                    <option value="USD">USD - US Dollar</option>
+                                    <option value="EUR">EUR - Euro</option>
+                                    <option value="GBP">GBP - British Pound</option>
+                                    <option value="CAD">CAD - Canadian Dollar</option>
+                                    <option value="AUD">AUD - Australian Dollar</option>
+                                    <option value="NGN">NGN - Nigerian Naira</option>
+                                </select>
+                                <div id="currencyError" class="text-red-500 text-sm mt-1 hidden">Please select currency
+                                </div>
+                            </div>
+                        </div>
+                        <div>
+                            <label for="swiftCode"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                SWIFT/BIC Code
+                            </label>
+                            <input type="text" id="swiftCode"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                placeholder="ABCDUS33XXX">
+                            <div id="swiftCodeError" class="text-red-500 text-sm mt-1 hidden">Please enter SWIFT/BIC
+                                code</div>
+                        </div>
+                        <div>
+                            <label for="internationalAccountNumber"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Account Number/IBAN
+                            </label>
+                            <input type="text" id="internationalAccountNumber"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                placeholder="Account number or IBAN">
+                            <div id="internationalAccountNumberError" class="text-red-500 text-sm mt-1 hidden">Please
+                                enter account number or IBAN</div>
+                        </div>
+                        <div>
+                            <label for="internationalRecipientName"
+                                class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Recipient Name
+                            </label>
+                            <input type="text" id="internationalRecipientName"
+                                class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                placeholder="John Doe">
+                            <div id="internationalRecipientNameError" class="text-red-500 text-sm mt-1 hidden">Please
+                                enter recipient's name</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Transfer Amount -->
+                <div>
+                    <label for="transferAmount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Transfer Amount
+                    </label>
+                    <div class="relative">
+                        <span
+                            class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 text-lg">$</span>
+                        <input type="number" id="transferAmount" step="0.01" min="0.01"
+                            class="w-full pl-8 pr-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                            placeholder="0.00">
+                    </div>
+                    <div id="transferAmountError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid amount
+                    </div>
+                    <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                        Available balance: $12,486.50
+                    </div>
+                </div>
+
+                <!-- Transfer Speed -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                        Transfer Speed
+                    </label>
+                    <div class="space-y-3">
+                        <label
+                            class="flex items-center justify-between p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <div class="flex items-center">
+                                <input type="radio" name="transferSpeed" value="instant"
+                                    class="text-primary focus:ring-primary mr-3">
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">Instant Transfer
+                                    </div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">Transfer completes within
+                                        minutes</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">$2.99</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Fee</div>
+                            </div>
+                        </label>
+                        <label
+                            class="flex items-center justify-between p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <div class="flex items-center">
+                                <input type="radio" name="transferSpeed" value="standard"
+                                    class="text-primary focus:ring-primary mr-3" checked>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900 dark:text-white">Standard Transfer
+                                    </div>
+                                    <div class="text-xs text-gray-500 dark:text-gray-400">Transfer completes within 1-2
+                                        business days</div>
+                                </div>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-sm font-medium text-green-600 dark:text-green-400">Free</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">No fee</div>
+                            </div>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Transfer Note -->
+                <div>
+                    <label for="transferNote" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Transfer Note (Optional)
+                    </label>
+                    <textarea id="transferNote" rows="3"
+                        class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white resize-none"
+                        placeholder="Add a note for the recipient"></textarea>
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn"
+                    class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                    <span>Review Transfer</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- Review Modal -->
+        <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 slide-in">
+                <div class="text-center mb-6">
+                    <div
+                        class="w-12 h-12 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Review Transfer</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Please confirm the transfer details</p>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Transfer Type:</span>
+                        <span id="reviewTransferType" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Recipient:</span>
+                        <span id="reviewRecipient" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Amount:</span>
+                        <span id="reviewTransferAmount" class="font-bold text-2xl text-primary"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Fee:</span>
+                        <span id="reviewFee" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                    <div class="flex justify-between border-t border-gray-200 dark:border-gray-600 pt-4">
+                        <span class="text-gray-600 dark:text-gray-400 font-medium">Total:</span>
+                        <span id="reviewTotal" class="font-bold text-lg text-gray-900 dark:text-white"></span>
+                    </div>
+                    <div id="reviewNoteRow" class="flex justify-between hidden">
+                        <span class="text-gray-600 dark:text-gray-400">Note:</span>
+                        <span id="reviewNote" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button id="cancelBtn"
+                        class="flex-1 px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button id="confirmBtn"
+                        class="flex-1 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                        Send Transfer
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Processing Modal -->
+        <div id="processingModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4">
+                <div class="text-center">
+                    <div class="relative w-16 h-16 mx-auto mb-4">
+                        <div class="absolute inset-0 bg-primary rounded-full pulse-ring"></div>
+                        <div class="relative w-16 h-16 bg-primary rounded-full flex items-center justify-center">
+                            <svg class="w-8 h-8 text-white animate-spin" fill="none" viewBox="0 0 24 24">
+                                <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor"
+                                    stroke-width="4"></circle>
+                                <path class="opacity-75" fill="currentColor"
+                                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z">
+                                </path>
+                            </svg>
+                        </div>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Processing Transfer</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Please wait while we process your transfer...</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal"
+            class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 slide-in">
+                <div class="text-center">
+                    <div
+                        class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor"
+                            viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7">
+                            </path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Transfer Successful!</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-4">Your transfer has been sent successfully.</p>
+                    <div class="bg-gray-50 dark:bg-gray-700 rounded-lg p-4 mb-6">
+                        <p class="text-sm text-gray-600 dark:text-gray-400">Transaction ID</p>
+                        <p class="font-mono text-lg font-medium text-gray-900 dark:text-white" id="transactionId">
+                            TXN123456789</p>
+                    </div>
+                    <div class="flex space-x-3">
+                        <button id="newTransferBtn"
+                            class="flex-1 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                            New Transfer
+                        </button>
+                        <button id="viewTransactionBtn"
+                            class="flex-1 px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                            View Details
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../transfer.js"></script>
+</body>
+
+</html>

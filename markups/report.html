@@ -1,0 +1,974 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Banking Report Generator</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49C7',
+                        'bank-blue': '#1e40af',
+                        'bank-green': '#059669'
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+    <!-- Header -->
+    <header class="bg-gradient-to-r from-bank-blue to-primary text-white shadow-lg">
+        <div class="container mx-auto px-4 py-6">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center space-x-3">
+                    <i class="fas fa-university text-2xl"></i>
+                    <div>
+                        <h1 class="text-2xl font-bold">Banking Report Center</h1>
+                        <p class="text-blue-100 text-sm">Comprehensive Financial Analytics</p>
+                    </div>
+                </div>
+                <div class="flex items-center space-x-4">
+                    <button id="exportBtn" class="bg-white bg-opacity-20 hover:bg-opacity-30 px-4 py-2 rounded-lg transition-all duration-200 flex items-center space-x-2">
+                        <i class="fas fa-download"></i>
+                        <span>Export</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <div class="container mx-auto px-4 py-8">
+        <div class="grid lg:grid-cols-4 gap-6">
+            <!-- Left Sidebar - Report Preferences -->
+            <div class="lg:col-span-1">
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg mb-6">
+                    <h2 class="text-lg font-semibold mb-4 flex items-center">
+                        <i class="fas fa-sliders-h mr-2 text-primary"></i>
+                        Report Preferences
+                    </h2>
+                    
+                    <!-- Report Type Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-3">Report Type</label>
+                        <div class="space-y-2">
+                            <label class="flex items-center">
+                                <input type="radio" name="reportType" value="overview" checked class="text-primary">
+                                <span class="ml-2 text-sm">Account Overview</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="reportType" value="transactions" class="text-primary">
+                                <span class="ml-2 text-sm">Transaction Analysis</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="reportType" value="spending" class="text-primary">
+                                <span class="ml-2 text-sm">Spending Report</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="reportType" value="investment" class="text-primary">
+                                <span class="ml-2 text-sm">Investment Portfolio</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="radio" name="reportType" value="savings" class="text-primary">
+                                <span class="ml-2 text-sm">Savings Analysis</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Date Range -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Date Range</label>
+                        <select id="dateRange" class="w-full px-3 py-2 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700">
+                            <option value="7">Last 7 days</option>
+                            <option value="30" selected>Last 30 days</option>
+                            <option value="90">Last 3 months</option>
+                            <option value="180">Last 6 months</option>
+                            <option value="365">Last year</option>
+                            <option value="custom">Custom Range</option>
+                        </select>
+                    </div>
+
+                    <!-- Custom Date Range -->
+                    <div id="customDateRange" class="mb-6 hidden">
+                        <div class="grid grid-cols-2 gap-2">
+                            <div>
+                                <label class="block text-xs font-medium mb-1">From</label>
+                                <input type="date" id="startDate" class="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-1 focus:ring-primary bg-white dark:bg-gray-700">
+                            </div>
+                            <div>
+                                <label class="block text-xs font-medium mb-1">To</label>
+                                <input type="date" id="endDate" class="w-full px-2 py-1 text-sm border border-gray-300 dark:border-gray-600 rounded focus:ring-1 focus:ring-primary bg-white dark:bg-gray-700">
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Account Selection -->
+                    <div class="mb-6">
+                        <label class="block text-sm font-medium mb-2">Accounts</label>
+                        <div class="space-y-2 max-h-32 overflow-y-auto">
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary account-filter" value="checking">
+                                <span class="ml-2 text-sm">Checking Account</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary account-filter" value="savings">
+                                <span class="ml-2 text-sm">Savings Account</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary account-filter" value="credit">
+                                <span class="ml-2 text-sm">Credit Card</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary account-filter" value="investment">
+                                <span class="ml-2 text-sm">Investment Account</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Categories (for spending reports) -->
+                    <div class="mb-6" id="categoryFilter">
+                        <label class="block text-sm font-medium mb-2">Categories</label>
+                        <div class="space-y-2 max-h-32 overflow-y-auto">
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary category-filter" value="food">
+                                <span class="ml-2 text-sm">Food & Dining</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary category-filter" value="shopping">
+                                <span class="ml-2 text-sm">Shopping</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary category-filter" value="transportation">
+                                <span class="ml-2 text-sm">Transportation</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary category-filter" value="utilities">
+                                <span class="ml-2 text-sm">Bills & Utilities</span>
+                            </label>
+                            <label class="flex items-center">
+                                <input type="checkbox" checked class="text-primary category-filter" value="entertainment">
+                                <span class="ml-2 text-sm">Entertainment</span>
+                            </label>
+                        </div>
+                    </div>
+
+                    <button id="generateReport" class="w-full bg-primary hover:bg-primary-dark text-white font-medium py-3 px-4 rounded-lg transition-colors duration-200">
+                        <i class="fas fa-chart-bar mr-2"></i>
+                        Generate Report
+                    </button>
+                </div>
+
+                <!-- Quick Stats -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl p-4 shadow-lg">
+                    <h3 class="text-sm font-medium mb-3 text-gray-600 dark:text-gray-400">Quick Stats</h3>
+                    <div class="space-y-3">
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-500">Total Balance</span>
+                            <span class="text-sm font-medium text-bank-green">$24,580.32</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-500">This Month</span>
+                            <span class="text-sm font-medium text-red-500">-$2,140.50</span>
+                        </div>
+                        <div class="flex justify-between items-center">
+                            <span class="text-xs text-gray-500">Investments</span>
+                            <span class="text-sm font-medium text-blue-500">$45,200.00</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Main Content - Reports Display -->
+            <div class="lg:col-span-3">
+                <!-- Report Header -->
+                <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg mb-6 overflow-hidden">
+                    <div class="bg-gradient-to-r from-bank-blue to-primary text-white p-6">
+                        <div class="flex items-center justify-between">
+                            <div>
+                                <h2 class="text-xl font-bold" id="reportTitle">Account Overview Report</h2>
+                                <p class="text-blue-100 text-sm" id="reportSubtitle">Comprehensive account summary and analysis</p>
+                            </div>
+                            <div class="text-right">
+                                <div class="text-xs text-blue-100">Generated</div>
+                                <div class="text-sm font-medium" id="reportDate"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Dynamic Report Content -->
+                <div id="reportContent">
+                    <!-- Overview Report (Default) -->
+                    <div id="overviewReport" class="report-section">
+                        <!-- Account Summary Cards -->
+                        <div class="grid md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-l-4 border-bank-green">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Total Assets</h3>
+                                        <p class="text-2xl font-bold text-bank-green">$69,780.32</p>
+                                        <p class="text-xs text-green-600">+5.2% from last month</p>
+                                    </div>
+                                    <div class="bg-green-100 dark:bg-green-900 p-3 rounded-full">
+                                        <i class="fas fa-wallet text-bank-green text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-l-4 border-blue-500">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Monthly Income</h3>
+                                        <p class="text-2xl font-bold text-blue-600">$5,420.00</p>
+                                        <p class="text-xs text-blue-600">Regular deposits</p>
+                                    </div>
+                                    <div class="bg-blue-100 dark:bg-blue-900 p-3 rounded-full">
+                                        <i class="fas fa-arrow-up text-blue-500 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg border-l-4 border-red-500">
+                                <div class="flex items-center justify-between">
+                                    <div>
+                                        <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Monthly Expenses</h3>
+                                        <p class="text-2xl font-bold text-red-600">$3,280.50</p>
+                                        <p class="text-xs text-red-600">-8.1% from last month</p>
+                                    </div>
+                                    <div class="bg-red-100 dark:bg-red-900 p-3 rounded-full">
+                                        <i class="fas fa-arrow-down text-red-500 text-xl"></i>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Account Details -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+                            <h3 class="text-lg font-semibold mb-4">Account Breakdown</h3>
+                            <div class="space-y-4">
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-bank-green text-white p-2 rounded-lg">
+                                            <i class="fas fa-university"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">Primary Checking</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">****1234</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold text-lg">$8,420.32</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">Available</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-blue-500 text-white p-2 rounded-lg">
+                                            <i class="fas fa-piggy-bank"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">High Yield Savings</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">****5678</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold text-lg">$16,160.00</p>
+                                        <p class="text-sm text-gray-600 dark:text-gray-400">2.4% APY</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                    <div class="flex items-center space-x-3">
+                                        <div class="bg-purple-500 text-white p-2 rounded-lg">
+                                            <i class="fas fa-chart-line"></i>
+                                        </div>
+                                        <div>
+                                            <h4 class="font-medium">Investment Portfolio</h4>
+                                            <p class="text-sm text-gray-600 dark:text-gray-400">Mixed Assets</p>
+                                        </div>
+                                    </div>
+                                    <div class="text-right">
+                                        <p class="font-bold text-lg">$45,200.00</p>
+                                        <p class="text-sm text-green-600">+12.3% YTD</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Balance Trend Chart -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold mb-4">Balance Trend</h3>
+                            <canvas id="balanceChart" height="100"></canvas>
+                        </div>
+                    </div>
+
+                    <!-- Transaction Report -->
+                    <div id="transactionReport" class="report-section hidden">
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-8">
+                            <h3 class="text-lg font-semibold mb-4">Transaction Summary</h3>
+                            <div class="grid md:grid-cols-2 gap-6 mb-6">
+                                <canvas id="transactionTypeChart"></canvas>
+                                <div class="space-y-4">
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                        <h4 class="font-medium">Total Transactions</h4>
+                                        <p class="text-2xl font-bold text-primary">156</p>
+                                    </div>
+                                    <div class="p-4 bg-gray-50 dark:bg-gray-700 rounded-lg">
+                                        <h4 class="font-medium">Average Transaction</h4>
+                                        <p class="text-2xl font-bold text-blue-600">$47.32</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Recent Transactions -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold mb-4">Recent Transactions</h3>
+                            <div class="space-y-3" id="transactionList">
+                                <!-- Transactions will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Spending Report -->
+                    <div id="spendingReport" class="report-section hidden">
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">Spending by Category</h3>
+                                <canvas id="spendingChart"></canvas>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">Monthly Trend</h3>
+                                <canvas id="spendingTrendChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Category Breakdown -->
+                        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                            <h3 class="text-lg font-semibold mb-4">Category Analysis</h3>
+                            <div class="space-y-4" id="categoryBreakdown">
+                                <!-- Category details will be populated here -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Investment Report -->
+                    <div id="investmentReport" class="report-section hidden">
+                        <div class="grid md:grid-cols-3 gap-6 mb-8">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                                <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Portfolio Value</h3>
+                                <p class="text-2xl font-bold text-bank-green">$45,200.00</p>
+                                <p class="text-sm text-green-600">+$4,320 (10.6%)</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                                <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">YTD Return</h3>
+                                <p class="text-2xl font-bold text-blue-600">+12.3%</p>
+                                <p class="text-sm text-blue-600">Above benchmark</p>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl p-6 shadow-lg">
+                                <h3 class="text-sm font-medium text-gray-600 dark:text-gray-400">Risk Score</h3>
+                                <p class="text-2xl font-bold text-yellow-600">Moderate</p>
+                                <p class="text-sm text-gray-600 dark:text-gray-400">6/10</p>
+                            </div>
+                        </div>
+
+                        <div class="grid md:grid-cols-2 gap-6">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">Asset Allocation</h3>
+                                <canvas id="allocationChart"></canvas>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">Performance</h3>
+                                <canvas id="performanceChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Savings Report -->
+                    <div id="savingsReport" class="report-section hidden">
+                        <div class="grid md:grid-cols-2 gap-6 mb-8">
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">Savings Goal Progress</h3>
+                                <div class="space-y-4">
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span>Emergency Fund</span>
+                                            <span>$8,000 / $10,000</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                            <div class="bg-bank-green h-2 rounded-full" style="width: 80%"></div>
+                                        </div>
+                                    </div>
+                                    <div>
+                                        <div class="flex justify-between text-sm mb-1">
+                                            <span>Vacation Fund</span>
+                                            <span>$2,500 / $5,000</span>
+                                        </div>
+                                        <div class="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2">
+                                            <div class="bg-blue-500 h-2 rounded-full" style="width: 50%"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6">
+                                <h3 class="text-lg font-semibold mb-4">Savings Rate</h3>
+                                <canvas id="savingsChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Dark mode support
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            document.documentElement.classList.add('dark');
+        }
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', event => {
+            if (event.matches) {
+                document.documentElement.classList.add('dark');
+            } else {
+                document.documentElement.classList.remove('dark');
+            }
+        });
+
+        // Chart instances
+        let balanceChart = null;
+        let transactionTypeChart = null;
+        let spendingChart = null;
+        let spendingTrendChart = null;
+        let allocationChart = null;
+        let performanceChart = null;
+        let savingsChart = null;
+
+        // Sample data
+        const sampleData = {
+            transactions: [
+                { date: '2024-01-15', description: 'Starbucks Coffee', amount: -4.85, category: 'food', type: 'debit' },
+                { date: '2024-01-15', description: 'Salary Deposit', amount: 5420.00, category: 'income', type: 'credit' },
+                { date: '2024-01-14', description: 'Amazon Purchase', amount: -67.32, category: 'shopping', type: 'debit' },
+                { date: '2024-01-14', description: 'Gas Station', amount: -45.20, category: 'transportation', type: 'debit' },
+                { date: '2024-01-13', description: 'Electric Bill', amount: -128.45, category: 'utilities', type: 'debit' },
+                { date: '2024-01-12', description: 'Netflix Subscription', amount: -15.99, category: 'entertainment', type: 'debit' },
+                { date: '2024-01-11', description: 'Restaurant Dinner', amount: -89.50, category: 'food', type: 'debit' },
+                { date: '2024-01-10', description: 'Uber Ride', amount: -23.40, category: 'transportation', type: 'debit' }
+            ],
+            spendingByCategory: {
+                food: 780.50,
+                shopping: 1240.80,
+                transportation: 320.45,
+                utilities: 450.20,
+                entertainment: 180.75
+            }
+        };
+
+        // Initialize the app
+        function initializeApp() {
+            updateReportDate();
+            setupEventListeners();
+            generateReport();
+        }
+
+        function updateReportDate() {
+            const now = new Date();
+            document.getElementById('reportDate').textContent = now.toLocaleDateString('en-US', {
+                month: 'short',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+
+        function setupEventListeners() {
+            // Report type change
+            document.querySelectorAll('input[name="reportType"]').forEach(radio => {
+                radio.addEventListener('change', generateReport);
+            });
+
+            // Date range change
+            document.getElementById('dateRange').addEventListener('change', function() {
+                const customRange = document.getElementById('customDateRange');
+                if (this.value === 'custom') {
+                    customRange.classList.remove('hidden');
+                } else {
+                    customRange.classList.add('hidden');
+                }
+                generateReport();
+            });
+
+            // Custom date inputs
+            document.getElementById('startDate').addEventListener('change', generateReport);
+            document.getElementById('endDate').addEventListener('change', generateReport);
+
+            // Account and category filters
+            document.querySelectorAll('.account-filter, .category-filter').forEach(checkbox => {
+                checkbox.addEventListener('change', generateReport);
+            });
+
+            // Generate report button
+            document.getElementById('generateReport').addEventListener('click', generateReport);
+
+            // Export button
+            document.getElementById('exportBtn').addEventListener('click', exportReport);
+        }
+
+        function generateReport() {
+            const reportType = document.querySelector('input[name="reportType"]:checked').value;
+            
+            // Hide all report sections
+            document.querySelectorAll('.report-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+
+            // Update report title and subtitle
+            updateReportHeader(reportType);
+
+            // Show selected report section and generate content
+            switch(reportType) {
+                case 'overview':
+                    document.getElementById('overviewReport').classList.remove('hidden');
+                    generateOverviewReport();
+                    break;
+                case 'transactions':
+                    document.getElementById('transactionReport').classList.remove('hidden');
+                    generateTransactionReport();
+                    break;
+                case 'spending':
+                    document.getElementById('spendingReport').classList.remove('hidden');
+                    generateSpendingReport();
+                    break;
+                case 'investment':
+                    document.getElementById('investmentReport').classList.remove('hidden');
+                    generateInvestmentReport();
+                    break;
+                case 'savings':
+                    document.getElementById('savingsReport').classList.remove('hidden');
+                    generateSavingsReport();
+                    break;
+            }
+        }
+
+        function updateReportHeader(reportType) {
+            const titles = {
+                overview: { title: 'Account Overview Report', subtitle: 'Comprehensive account summary and analysis' },
+                transactions: { title: 'Transaction Analysis Report', subtitle: 'Detailed transaction history and patterns' },
+                spending: { title: 'Spending Analysis Report', subtitle: 'Category-wise spending breakdown and trends' },
+                investment: { title: 'Investment Portfolio Report', subtitle: 'Performance and allocation analysis' },
+                savings: { title: 'Savings Analysis Report', subtitle: 'Goals progress and savings rate analysis' }
+            };
+
+            document.getElementById('reportTitle').textContent = titles[reportType].title;
+            document.getElementById('reportSubtitle').textContent = titles[reportType].subtitle;
+        }
+
+        function generateOverviewReport() {
+            // Create balance trend chart
+            createBalanceChart();
+        }
+
+        function generateTransactionReport() {
+            // Generate transaction type chart
+            createTransactionTypeChart();
+            
+            // Populate transaction list
+            populateTransactionList();
+        }
+
+        function generateSpendingReport() {
+            // Create spending charts
+            createSpendingChart();
+            createSpendingTrendChart();
+            
+            // Populate category breakdown
+            populateCategoryBreakdown();
+        }
+
+        function generateInvestmentReport() {
+            // Create investment charts
+            createAllocationChart();
+            createPerformanceChart();
+        }
+
+        function generateSavingsReport() {
+            // Create savings chart
+            createSavingsChart();
+        }
+
+        function createBalanceChart() {
+            const ctx = document.getElementById('balanceChart').getContext('2d');
+            
+            if (balanceChart) {
+                balanceChart.destroy();
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#374151';
+            const gridColor = isDark ? '#4b5563' : '#d1d5db';
+
+            balanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Total Balance',
+                        data: [65000, 66500, 68200, 67800, 69100, 69780],
+                        borderColor: '#5D5CDE',
+                        backgroundColor: 'rgba(93, 92, 222, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: {
+                        y: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        },
+                        x: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createTransactionTypeChart() {
+            const ctx = document.getElementById('transactionTypeChart').getContext('2d');
+            
+            if (transactionTypeChart) {
+                transactionTypeChart.destroy();
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#374151';
+
+            transactionTypeChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Debits', 'Credits', 'Transfers'],
+                    datasets: [{
+                        data: [142, 8, 6],
+                        backgroundColor: ['#ef4444', '#059669', '#3b82f6']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSpendingChart() {
+            const ctx = document.getElementById('spendingChart').getContext('2d');
+            
+            if (spendingChart) {
+                spendingChart.destroy();
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#374151';
+
+            spendingChart = new Chart(ctx, {
+                type: 'pie',
+                data: {
+                    labels: ['Food & Dining', 'Shopping', 'Transportation', 'Bills & Utilities', 'Entertainment'],
+                    datasets: [{
+                        data: [780.50, 1240.80, 320.45, 450.20, 180.75],
+                        backgroundColor: ['#f59e0b', '#8b5cf6', '#06b6d4', '#ef4444', '#10b981']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSpendingTrendChart() {
+            const ctx = document.getElementById('spendingTrendChart').getContext('2d');
+            
+            if (spendingTrendChart) {
+                spendingTrendChart.destroy();
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#374151';
+            const gridColor = isDark ? '#4b5563' : '#d1d5db';
+
+            spendingTrendChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Week 1', 'Week 2', 'Week 3', 'Week 4'],
+                    datasets: [{
+                        label: 'Weekly Spending',
+                        data: [820, 750, 690, 720],
+                        backgroundColor: '#5D5CDE'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        },
+                        x: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createAllocationChart() {
+            const ctx = document.getElementById('allocationChart').getContext('2d');
+            
+            if (allocationChart) {
+                allocationChart.destroy();
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#374151';
+
+            allocationChart = new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Stocks', 'Bonds', 'ETFs', 'Cash'],
+                    datasets: [{
+                        data: [60, 25, 12, 3],
+                        backgroundColor: ['#3b82f6', '#059669', '#8b5cf6', '#f59e0b']
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createPerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            
+            if (performanceChart) {
+                performanceChart.destroy();
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#374151';
+            const gridColor = isDark ? '#4b5563' : '#d1d5db';
+
+            performanceChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Portfolio Value',
+                        data: [40000, 41200, 42800, 44100, 43800, 45200],
+                        borderColor: '#059669',
+                        backgroundColor: 'rgba(5, 150, 105, 0.1)',
+                        fill: true,
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        },
+                        x: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function createSavingsChart() {
+            const ctx = document.getElementById('savingsChart').getContext('2d');
+            
+            if (savingsChart) {
+                savingsChart.destroy();
+            }
+
+            const isDark = document.documentElement.classList.contains('dark');
+            const textColor = isDark ? '#e5e7eb' : '#374151';
+            const gridColor = isDark ? '#4b5563' : '#d1d5db';
+
+            savingsChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun'],
+                    datasets: [{
+                        label: 'Savings Rate (%)',
+                        data: [25, 28, 22, 30, 26, 24],
+                        backgroundColor: '#059669'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            max: 40,
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        },
+                        x: {
+                            ticks: { color: textColor },
+                            grid: { color: gridColor }
+                        }
+                    },
+                    plugins: {
+                        legend: {
+                            labels: { color: textColor }
+                        }
+                    }
+                }
+            });
+        }
+
+        function populateTransactionList() {
+            const container = document.getElementById('transactionList');
+            container.innerHTML = '';
+
+            sampleData.transactions.forEach(transaction => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 bg-gray-50 dark:bg-gray-700 rounded-lg';
+                
+                const amountClass = transaction.amount > 0 ? 'text-green-600' : 'text-red-600';
+                const icon = transaction.amount > 0 ? 'fa-arrow-up' : 'fa-arrow-down';
+                
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 rounded-full ${transaction.amount > 0 ? 'bg-green-100 dark:bg-green-900' : 'bg-red-100 dark:bg-red-900'}">
+                            <i class="fas ${icon} ${amountClass}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">${transaction.description}</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">${transaction.date}</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold ${amountClass}">${transaction.amount > 0 ? '+' : ''}$${Math.abs(transaction.amount).toFixed(2)}</p>
+                        <p class="text-sm text-gray-600 dark:text-gray-400 capitalize">${transaction.category}</p>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function populateCategoryBreakdown() {
+            const container = document.getElementById('categoryBreakdown');
+            container.innerHTML = '';
+
+            Object.entries(sampleData.spendingByCategory).forEach(([category, amount]) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-lg';
+                
+                const categoryNames = {
+                    food: 'Food & Dining',
+                    shopping: 'Shopping',
+                    transportation: 'Transportation',
+                    utilities: 'Bills & Utilities',
+                    entertainment: 'Entertainment'
+                };
+
+                const icons = {
+                    food: 'fa-utensils',
+                    shopping: 'fa-shopping-bag',
+                    transportation: 'fa-car',
+                    utilities: 'fa-bolt',
+                    entertainment: 'fa-film'
+                };
+                
+                div.innerHTML = `
+                    <div class="flex items-center space-x-3">
+                        <div class="p-2 rounded-full bg-primary text-white">
+                            <i class="fas ${icons[category]}"></i>
+                        </div>
+                        <div>
+                            <h4 class="font-medium">${categoryNames[category]}</h4>
+                            <p class="text-sm text-gray-600 dark:text-gray-400">${Math.round((amount / 2972.70) * 100)}% of total spending</p>
+                        </div>
+                    </div>
+                    <div class="text-right">
+                        <p class="font-bold text-lg">$${amount.toFixed(2)}</p>
+                    </div>
+                `;
+                
+                container.appendChild(div);
+            });
+        }
+
+        function exportReport() {
+            window.print();
+        }
+
+        // Initialize the application
+        initializeApp();
+    </script>
+
+    <style>
+        @media print {
+            body { 
+                background: white !important;
+                color: black !important;
+            }
+            header, .lg\\:col-span-1 { 
+                display: none !important;
+            }
+            .lg\\:col-span-3 {
+                grid-column: span 4 !important;
+            }
+        }
+        
+        .container {
+            max-width: 1400px;
+        }
+    </style>
+</body>
+</html>

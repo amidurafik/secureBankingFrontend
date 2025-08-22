@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deposit Interface</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="deposit.css">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4A49C7'
+                    }
+                }
+            }
+        }
+    </script>
+   
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-white min-h-screen">
+    <div class="container mx-auto px-4 py-8 max-w-2xl">
+        <!-- Header -->
+        <div class="text-center mb-8 fade-in">
+            <div class="w-16 h-16 bg-primary rounded-full flex items-center justify-center mx-auto mb-4">
+                <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6v6m0 0v6m0-6h6m-6 0H6"></path>
+                </svg>
+            </div>
+            <h1 class="text-3xl font-bold text-gray-900 dark:text-white mb-2">Make a Deposit</h1>
+            <p class="text-gray-600 dark:text-gray-400">Add funds to your account securely</p>
+        </div>
+
+        <!-- Main Form -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-6 mb-6 fade-in">
+            <form id="depositForm" class="space-y-6">
+                <!-- Account Selection -->
+                <div>
+                    <label for="account" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Select Account
+                    </label>
+                    <select id="account" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                        <option value="">Choose an account</option>
+                        <option value="checking-001">Checking Account (****-001)</option>
+                        <option value="savings-002">Savings Account (****-002)</option>
+                        <option value="business-003">Business Account (****-003)</option>
+                    </select>
+                    <div id="accountError" class="text-red-500 text-sm mt-1 hidden">Please select an account</div>
+                </div>
+
+                <!-- Deposit Amount -->
+                <div>
+                    <label for="amount" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Deposit Amount
+                    </label>
+                    <div class="relative">
+                        <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400 text-lg">$</span>
+                        <input type="number" id="amount" step="0.01" min="0.01" 
+                               class="w-full pl-8 pr-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                               placeholder="0.00">
+                    </div>
+                    <div id="amountError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid amount</div>
+                </div>
+
+                <!-- Payment Method -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-3">
+                        Payment Method
+                    </label>
+                    <div class="space-y-3">
+                        <label class="flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <input type="radio" name="paymentMethod" value="bank-transfer" class="text-primary focus:ring-primary">
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Bank Transfer</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Transfer from external bank account</div>
+                            </div>
+                        </label>
+                        
+                        <!-- Bank Transfer Details -->
+                        <div id="bankTransferSection" class="ml-8 mt-3 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label for="bankName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Bank Name
+                                    </label>
+                                    <select id="bankName" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                        <option value="">Select your bank</option>
+                                        <option value="gcb">GCB Bank</option>
+                                        <option value="ecobank">Ecobank Ghana</option>
+                                        <option value="stanbic">Stanbic Bank Ghana</option>
+                                        <option value="cal">CAL Bank</option>
+                                        <option value="uba">UBA Ghana</option>
+                                        <option value="fidelity">Fidelity Bank Ghana</option>
+                                        <option value="absa">Absa Bank Ghana</option>
+                                        <option value="zenith">Zenith Bank Ghana</option>
+                                        <option value="access">Access Bank Ghana</option>
+                                        <option value="adb">ADB Bank</option>
+                                    </select>
+                                    <div id="bankNameError" class="text-red-500 text-sm mt-1 hidden">Please select your bank</div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="accountNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Account Number
+                                    </label>
+                                    <input type="text" id="accountNumber" 
+                                           class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           placeholder="1234567890">
+                                    <div id="accountNumberError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid account number</div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="accountHolderName" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Account Holder Name
+                                    </label>
+                                    <input type="text" id="accountHolderName" 
+                                           class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           placeholder="John Doe">
+                                    <div id="accountHolderNameError" class="text-red-500 text-sm mt-1 hidden">Please enter the account holder name</div>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <input type="radio" name="paymentMethod" value="debit-card" class="text-primary focus:ring-primary">
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Debit Card</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Instant deposit with debit card</div>
+                            </div>
+                        </label>
+                        
+                        <!-- Debit Card Details -->
+                        <div id="debitCardSection" class="ml-8 mt-3 hidden">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div class="md:col-span-2">
+                                    <label for="cardNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Card Number
+                                    </label>
+                                    <input type="text" id="cardNumber" 
+                                           class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           placeholder="1234 5678 9012 3456" maxlength="19">
+                                    <div id="cardNumberError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid card number</div>
+                                </div>
+                                <div class="md:col-span-2">
+                                    <label for="cardHolder" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Cardholder Name
+                                    </label>
+                                    <input type="text" id="cardHolder" 
+                                           class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           placeholder="John Doe">
+                                    <div id="cardHolderError" class="text-red-500 text-sm mt-1 hidden">Please enter the cardholder name</div>
+                                </div>
+                                <div>
+                                    <label for="expiryDate" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        Expiry Date
+                                    </label>
+                                    <input type="text" id="expiryDate" 
+                                           class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           placeholder="MM/YY" maxlength="5">
+                                    <div id="expiryDateError" class="text-red-500 text-sm mt-1 hidden">Please enter expiry date (MM/YY)</div>
+                                </div>
+                                <div>
+                                    <label for="cvv" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                        CVV
+                                    </label>
+                                    <input type="text" id="cvv" 
+                                           class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           placeholder="123" maxlength="4">
+                                    <div id="cvvError" class="text-red-500 text-sm mt-1 hidden">Please enter CVV</div>
+                                </div>
+                            </div>
+                        </div>
+                        <label class="flex items-center p-4 border border-gray-300 dark:border-gray-600 rounded-lg cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors">
+                            <input type="radio" name="paymentMethod" value="check" class="text-primary focus:ring-primary">
+                            <div class="ml-3">
+                                <div class="text-sm font-medium text-gray-900 dark:text-white">Mobile Check Deposit</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400">Deposit check by taking a photo</div>
+                            </div>
+                        </label>
+                        
+                        <!-- Mobile Network Dropdown for Check Deposit -->
+                        <div id="mobileNetworkSection" class="ml-8 mt-3 hidden">
+                            <label for="mobileNetwork" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Select Mobile Network
+                            </label>
+                            <select id="mobileNetwork" class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                                <option value="">Choose your mobile network</option>
+                                <option value="mtn">MTN Ghana</option>
+                                <option value="vodafone">Vodafone Ghana</option>
+                                <option value="airteltigo">AirtelTigo</option>
+                                <option value="glo">Glo Mobile Ghana</option>
+                                <option value="expresso">Expresso Ghana</option>
+                                <option value="surfline">Surfline Ghana</option>
+                            </select>
+                            <div id="mobileNetworkError" class="text-red-500 text-sm mt-1 hidden">Please select your mobile network</div>
+                            
+                            <!-- Phone Number Field -->
+                            <div id="phoneNumberSection" class="mt-4 hidden">
+                                <label for="phoneNumber" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                    Mobile Number
+                                </label>
+                                <div class="relative">
+                                    <span class="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-500 dark:text-gray-400">+233</span>
+                                    <input type="tel" id="phoneNumber" value="244567890" 
+                                           class="w-full pl-16 pr-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                                           placeholder="244567890" maxlength="9" pattern="[0-9]{9}">
+                                </div>
+                                <div id="phoneNumberError" class="text-red-500 text-sm mt-1 hidden">Please enter a valid 9-digit Ghana mobile number</div>
+                                <div class="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                    <svg class="w-3 h-3 inline mr-1" fill="currentColor" viewBox="0 0 20 20">
+                                        <path fill-rule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clip-rule="evenodd"></path>
+                                    </svg>
+                                    Default number from your profile (you can edit if needed)
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="paymentError" class="text-red-500 text-sm mt-1 hidden">Please select a payment method</div>
+                </div>
+
+                <!-- Description (Optional) -->
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                        Description (Optional)
+                    </label>
+                    <input type="text" id="description" 
+                           class="w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent bg-white dark:bg-gray-700 text-gray-900 dark:text-white"
+                           placeholder="Enter a description for this deposit">
+                </div>
+
+                <!-- Submit Button -->
+                <button type="submit" id="submitBtn" 
+                        class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-4 px-6 rounded-lg transition-colors duration-200 flex items-center justify-center space-x-2">
+                    <span>Continue to Review</span>
+                    <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"></path>
+                    </svg>
+                </button>
+            </form>
+        </div>
+
+        <!-- Review Modal -->
+        <div id="reviewModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 slide-in">
+                <div class="text-center mb-6">
+                    <div class="w-12 h-12 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-6 h-6 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Review Your Deposit</h3>
+                    <p class="text-gray-600 dark:text-gray-400">Please confirm the details below</p>
+                </div>
+
+                <div class="space-y-4 mb-6">
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Account:</span>
+                        <span id="reviewAccount" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Amount:</span>
+                        <span id="reviewAmount" class="font-bold text-2xl text-primary"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Payment Method:</span>
+                        <span id="reviewPayment" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                    <div id="reviewMobileNetworkRow" class="flex justify-between hidden">
+                        <span class="text-gray-600 dark:text-gray-400">Mobile Network:</span>
+                        <span id="reviewMobileNetwork" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                    <div class="flex justify-between">
+                        <span class="text-gray-600 dark:text-gray-400">Description:</span>
+                        <span id="reviewDescription" class="font-medium text-gray-900 dark:text-white"></span>
+                    </div>
+                </div>
+
+                <div class="flex space-x-3">
+                    <button id="cancelBtn" class="flex-1 px-4 py-3 text-gray-600 dark:text-gray-400 hover:bg-gray-100 dark:hover:bg-gray-700 rounded-lg transition-colors">
+                        Cancel
+                    </button>
+                    <button id="confirmBtn" class="flex-1 bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                        Confirm Deposit
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Success Modal -->
+        <div id="successModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+            <div class="bg-white dark:bg-gray-800 rounded-xl shadow-2xl p-6 max-w-md w-full mx-4 slide-in">
+                <div class="text-center">
+                    <div class="w-16 h-16 bg-green-100 dark:bg-green-900 rounded-full flex items-center justify-center mx-auto mb-4">
+                        <svg class="w-8 h-8 text-green-600 dark:text-green-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path>
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-900 dark:text-white mb-2">Deposit Successful!</h3>
+                    <p class="text-gray-600 dark:text-gray-400 mb-6">Your deposit has been processed successfully.</p>
+                    <button id="newDepositBtn" class="w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg transition-colors">
+                        Make Another Deposit
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="../deposit.js" defer></script>
+</body>
+</html>

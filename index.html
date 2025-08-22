@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Secure Banking</title>
+    <link rel="stylesheet" href="login.css">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="frontend/dist/output.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4B4BC8',
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+
+<body>
+    <!-- Login/Signup Container -->
+    <div id="authContainer"
+        class="min-h-screen bg-gradient-to-br from-blue-50 to-indigo-100 dark:from-gray-800 dark:to-gray-900 flex items-center justify-center px-4 py-8">
+        <div class="max-w-md w-full">
+            <!-- Login Form -->
+            <div id="loginForm" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Welcome Back</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Sign in to your account</p>
+                </div>
+
+                <form id="loginFormSubmit" class="space-y-6">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Email or Phone Number
+                        </label>
+                        <input type="text" id="loginIdentifier" required
+                            class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="Enter email or phone number">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Password
+                        </label>
+                        <input type="password" id="loginPassword" required
+                            class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="Enter your password">
+                    </div>
+
+                    <button type="submit"
+                        class="btn-primary ripple w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg">
+                        Continue to Face Verification
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Don't have an account?
+                        <button id="signUpbtn" class="text-primary hover:underline font-medium">Sign up</button>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Signup Form -->
+            <div id="signupForm" class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8 hidden">
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white">Create Account</h2>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2">Join SecureBank today</p>
+                </div>
+
+                <form id="signupFormSubmit" class="space-y-6">
+                    <div class="grid grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                First Name
+                            </label>
+                            <input type="text" id="firstName" required
+                                class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                placeholder="First name">
+                        </div>
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                                Last Name
+                            </label>
+                            <input type="text" id="lastName" required
+                                class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                                placeholder="Last name">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Email Address
+                        </label>
+                        <input type="email" id="signupEmail" required
+                            class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="Enter your email">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Phone Number
+                        </label>
+                        <input type="tel" id="signupPhone" required
+                            class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="Enter your phone number">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Password
+                        </label>
+                        <input type="password" id="signupPassword" required
+                            class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="Create a password">
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-2">
+                            Confirm Password
+                        </label>
+                        <input type="password" id="confirmPassword" required
+                            class="form-input w-full px-4 py-3 text-base border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-primary focus:border-transparent dark:bg-gray-700 dark:text-white"
+                            placeholder="Confirm your password">
+                    </div>
+
+                    <button type="submit"
+                        class="btn-primary ripple w-full bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-4 rounded-lg">
+                        Continue to Face Registration
+                    </button>
+                </form>
+
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600 dark:text-gray-400">
+                        Already have an account?
+                        <button onclick="showLogin()" class="text-primary hover:underline font-medium">Sign in</button>
+                    </p>
+                </div>
+            </div>
+
+            <!-- Face Recognition -->
+            <div id="faceRecognition"
+                class="bg-white dark:bg-gray-800 rounded-2xl faceRecognition shadow-2xl p-8 hidden">
+
+                <!-- Title -->
+                <div class="text-center mb-8">
+                    <h2 class="text-3xl font-bold text-gray-800 dark:text-white" id="faceTitle">
+                        Face Verification
+                    </h2>
+                    <p class="text-gray-600 dark:text-gray-400 mt-2" id="faceSubtitle">
+                        Please look at the camera
+                    </p>
+                </div>
+
+                <!-- Camera Container -->
+                <div class="relative mb-8">
+                    <div
+                        class="w-64 h-64 mx-auto bg-gray-200 dark:bg-gray-700 rounded-full flex items-center justify-center relative overflow-hidden">
+
+                        <!-- Video feed for webcam -->
+                        <div
+                            class="face-scanner w-full h-full rounded-full flex items-center justify-center overflow-hidden">
+                            <video id="faceVideo" autoplay muted playsinline
+                                class="w-full h-full object-cover rounded-full"></video>
+                        </div>
+
+                        <!-- Overlay animation for scanning effect -->
+                        <div class="scan-overlay absolute inset-4"></div>
+                    </div>
+
+                    <!-- Status text -->
+                    <div id="scanningText" class="text-center mt-4 text-primary font-medium">
+                        Initializing camera...
+                    </div>
+                </div>
+
+                <!-- Buttons -->
+                <div class="text-center space-y-4">
+                    <button id="startScanBtn"
+                        class="bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg transition duration-300">
+                        Start Verification
+                    </button>
+                    <div>
+                        <button onclick="skipFaceRecognition()"
+                            class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 text-sm">
+                            Skip for now (Less secure)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl text-center">
+            <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4">
+            </div>
+            <p class="text-gray-700 dark:text-gray-300 loading-dots">Processing</p>
+        </div>
+    </div>
+    <!-- Custom Modal for Alerts -->
+    <div id="customModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4 slide-in">
+            <p id="modalMessage" class="text-gray-700 dark:text-gray-300 mb-4"></p>
+            <div class="flex justify-end">
+                <button id="closeModal"
+                    class="px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all duration-300">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script type="module" src="auth.js"></script>
+    <script type="module" src="script.js"></script>
+</body>
+
+</html>

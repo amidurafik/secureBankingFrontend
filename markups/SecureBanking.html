@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SecureBank - Online Banking</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+    <link href="frontend/dist/output.css" rel="stylesheet">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#5D5CDE',
+                        'primary-dark': '#4B4BC8',
+                    }
+                }
+            }
+        }
+    </script>
+    
+</head>
+<body class="bg-white dark:bg-gray-900 font-sans transition-colors duration-300">
+    <!-- Header -->
+    <header class="bg-primary text-white shadow-lg">
+        <div class="container mx-auto px-4 py-4">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <div class="w-8 h-8 bg-white rounded-full flex items-center justify-center">
+                        <span class="text-primary font-bold text-lg">S</span>
+                    </div>
+                    <h1 class="text-2xl font-bold">SecureBank</h1>
+                </div>
+                <div class="text-sm opacity-90">
+                    Secure • Trusted • Reliable
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Banking Interface -->
+    <div id="bankingInterface" class=" min-h-screen bg-gray-50 dark:bg-gray-900">
+        <!-- Navigation -->
+        <nav class="bg-white dark:bg-gray-800 shadow-lg border-b dark:border-gray-700">
+            <div class="container mx-auto px-4">
+                <div class="flex justify-between items-center h-16">
+                    <div class="flex items-center space-x-4">
+                        <h1 class="text-xl font-bold text-gray-800 dark:text-white">Dashboard</h1>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <span class="text-gray-600 dark:text-gray-400" id="userGreeting">Welcome back!</span>
+                        <button id="logout" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg text-sm transition duration-300">
+                            Logout
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </nav>
+
+        <!-- Main Content -->
+        <div class="container mx-auto px-4 py-8">
+            <!-- Account Overview -->
+            <div id="accountOverview" class="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+                <div class="account-card text-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-lg font-semibold opacity-90">Checking Account</h3>
+                    <p class="text-3xl font-bold mt-2">$12,450.80</p>
+                    <p class="text-sm opacity-75 mt-1">****1234</p>
+                </div>
+                <div class="bg-green-500 text-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-lg font-semibold opacity-90">Savings Account</h3>
+                    <p class="text-3xl font-bold mt-2">$45,230.15</p>
+                    <p class="text-sm opacity-75 mt-1">****5678</p>
+                </div>
+                <div class="bg-orange-500 text-white p-6 rounded-2xl shadow-lg">
+                    <h3 class="text-lg font-semibold opacity-90">Credit Card</h3>
+                    <p class="text-3xl font-bold mt-2">$2,340.50</p>
+                    <p class="text-sm opacity-75 mt-1">Available: $7,659.50</p>
+                </div>
+            </div>
+
+            <!-- Quick Actions -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6 mb-8">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Quick Actions</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4">
+                    <button class="quick-action flex flex-col items-center p-4 bg-blue-50 dark:bg-blue-900/20 rounded-xl hover:bg-blue-100 dark:hover:bg-blue-900/30" 
+                    >
+                    <a href="transfer.html">
+                        <div class="w-12 h-12 bg-blue-500 rounded-full flex items-center justify-center mb-3">
+                            <span class="text-white text-xl">💸</span>
+                        </div>
+                        <span class="text-blue-700 dark:text-blue-300 font-medium">Transfer</span>
+                    </a>
+                    </button>
+                    <button class="quick-action flex flex-col items-center p-4 bg-green-50 dark:bg-green-900/20 rounded-xl hover:bg-green-100 dark:hover:bg-green-900/30" 
+                    onclick="location.href='paybills.html'">
+                        <div class="w-12 h-12 bg-green-500 rounded-full flex items-center justify-center mb-3">
+                            <span class="text-white text-xl">💳</span>
+                        </div>
+                        <span class="text-green-700 dark:text-green-300 font-medium">Pay Bills</span>
+                    </button>
+                    <button class="quick-action flex flex-col items-center p-4 bg-purple-50 dark:bg-purple-900/20 rounded-xl hover:bg-purple-100 dark:hover:bg-purple-900/30" 
+                    onclick="location.href='deposit.html'">
+                        <div class="w-12 h-12 bg-purple-500 rounded-full flex items-center justify-center mb-3">
+                            <span class="text-white text-xl">💰</span>
+                        </div>
+                        <span class="text-purple-700 dark:text-purple-300 font-medium">Deposit</span>
+                    </button>
+                    <button class="quick-action flex flex-col items-center p-4 bg-orange-50 dark:bg-orange-900/20 rounded-xl hover:bg-orange-100 dark:hover:bg-orange-900/30"
+                     onclick="location.href='report.html'">
+                        <div class="w-12 h-12 bg-orange-500 rounded-full flex items-center justify-center mb-3">
+                            <span class="text-white text-xl">📊</span>
+                        </div>
+                        <span class="text-orange-700 dark:text-orange-300 font-medium">Reports</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Recent Transactions -->
+            <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-lg p-6">
+                <h2 class="text-2xl font-bold text-gray-800 dark:text-white mb-6">Recent Transactions</h2>
+                <div class="space-y-4">
+                    <div class="transaction-item flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm">💰</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800 dark:text-white">Salary Deposit</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Dec 15, 2024</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-green-600">+$3,200.00</span>
+                    </div>
+                    <div class="transaction-item flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-red-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm">🏪</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800 dark:text-white">Grocery Store</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Dec 14, 2024</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-red-600">-$127.45</span>
+                    </div>
+                    <div class="transaction-item flex items-center justify-between p-4 bg-gray-50 dark:bg-gray-700 rounded-xl">
+                        <div class="flex items-center space-x-4">
+                            <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center">
+                                <span class="text-white text-sm">⚡</span>
+                            </div>
+                            <div>
+                                <p class="font-medium text-gray-800 dark:text-white">Electric Bill</p>
+                                <p class="text-sm text-gray-500 dark:text-gray-400">Dec 13, 2024</p>
+                            </div>
+                        </div>
+                        <span class="font-bold text-red-600">-$89.20</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Modal for Alerts -->
+    <div id="customModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-lg max-w-sm w-full mx-4 slide-in">
+            <p id="modalMessage" class="text-gray-700 dark:text-gray-300 mb-4"></p>
+            <div class="flex justify-end">
+                <button onclick="closeModal()" class="px-4 py-2 bg-primary text-white hover:bg-primary-dark rounded transition-all duration-300">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Action Modal -->
+    <div id="actionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl max-w-md w-full mx-4 slide-in">
+            <div class="text-center mb-6">
+                <h3 id="actionTitle" class="text-2xl font-bold text-gray-800 dark:text-white mb-2"></h3>
+                <p class="text-gray-600 dark:text-gray-400">Feature coming soon!</p>
+            </div>
+            <div class="text-center">
+                <button onclick="closeActionModal()" class="btn-primary ripple bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg">
+                    Got it
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Transaction Detail Modal -->
+    <div id="transactionModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 p-6 rounded-2xl shadow-2xl max-w-md w-full mx-4 slide-in">
+            <div class="text-center mb-6">
+                <div id="transactionIcon" class="w-16 h-16 mx-auto mb-4 rounded-full flex items-center justify-center"></div>
+                <h3 id="transactionTitle" class="text-2xl font-bold text-gray-800 dark:text-white mb-2"></h3>
+                <p id="transactionAmount" class="text-3xl font-bold mb-2"></p>
+                <p id="transactionDate" class="text-gray-600 dark:text-gray-400"></p>
+            </div>
+            <div class="space-y-3 mb-6">
+                <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-400">Transaction ID:</span>
+                    <span id="transactionId" class="font-mono text-sm"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-400">Status:</span>
+                    <span class="text-green-600 font-semibold">Completed</span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600 dark:text-gray-400">Account:</span>
+                    <span>****1234</span>
+                </div>
+            </div>
+            <div class="text-center">
+                <button id="closeTransactionModalBtn" class="btn-primary ripple bg-primary hover:bg-primary-dark text-white font-semibold py-3 px-6 rounded-lg">
+                    Close
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Loading Overlay -->
+    <div id="loadingOverlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+        <div class="bg-white dark:bg-gray-800 p-8 rounded-2xl shadow-2xl text-center">
+            <div class="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+            <p class="text-gray-700 dark:text-gray-300 loading-dots">Processing</p>
+        </div>
+    </div>
+
+
+<script type="module"   src="../script.js" ></script>
+<!-- <script  src="../auth.js"></script> -->
+</body>
+
+</html>
